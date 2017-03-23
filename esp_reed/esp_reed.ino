@@ -47,7 +47,7 @@ void loop() {
 
   if (digitalRead(2) == 0 && flag == 0) {
     Serial.println("Open");
-    makerdoor_status();
+    post_status();
     flag = 1;
 
   }
@@ -61,9 +61,8 @@ void loop() {
 }
 
 
-const char* host = "maker.ifttt.com";
-const char* apiKey = "eNdr5Ubz3_s8BDc5n9xXXukMWzSGahUxVmQgw5jHk_H";
-void makerdoor_status() {
+
+void post_status() {
 
   Serial.print("connecting to ");
   Serial.println(host);
@@ -75,16 +74,19 @@ void makerdoor_status() {
     return;
   }
 
-  String url = "/trigger/Door_status/with/key/";
-  url += apiKey;
-
+  
+  String url = "/sensor.php"; // page
+  String host = "copyTrades-jamesarchuleta846885.codeanyapp.com"; // no http
+  String data = "key=123&name="+ESP.getChipId()+"&event=door&value=open";
+   
+   
   Serial.print("Requesting URL: ");
   Serial.println(url);
   client.print(String("POST ") + url + " HTTP/1.1\r\n" +
                "Host: " + host + "\r\n" +
                "Content-Type: application/x-www-form-urlencoded\r\n" +
-               "Content-Length: 13\r\n\r\n" +
-               "value1=opened\r\n");
+               "Content-Length: "+strlen(data)+"\r\n\r\n" +
+               data + "\r\n");
 
   delay(10);
 
