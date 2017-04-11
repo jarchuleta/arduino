@@ -47,22 +47,23 @@ void loop() {
 
   if (digitalRead(2) == 0 && flag == 0) {
     Serial.println("Open");
-    post_status();
+    post_status("zero");
     flag = 1;
-
   }
 
   if (digitalRead(2) == 1 && flag == 1) {
     flag = 0;
     Serial.println("Close");
+    post_status("one");
 
   }
 
 }
 
-
-
-void post_status() {
+  char *url = "/sensor.php"; // page
+  char *host = "copyTrades-jamesarchuleta846885.codeanyapp.com"; // no http
+ 
+void post_status(String value) {
 
   Serial.print("connecting to ");
   Serial.println(host);
@@ -75,17 +76,17 @@ void post_status() {
   }
 
   
-  String url = "/sensor.php"; // page
-  String host = "copyTrades-jamesarchuleta846885.codeanyapp.com"; // no http
-  String data = "key=123&name="+ESP.getChipId()+"&event=door&value=open";
+
    
-   
+    String data = "key=123&name=" + (String)ESP.getChipId() + "&event=door&value=" + value;
+
+    
   Serial.print("Requesting URL: ");
   Serial.println(url);
   client.print(String("POST ") + url + " HTTP/1.1\r\n" +
                "Host: " + host + "\r\n" +
                "Content-Type: application/x-www-form-urlencoded\r\n" +
-               "Content-Length: "+strlen(data)+"\r\n\r\n" +
+               "Content-Length: "+ data.length() +"\r\n\r\n" +
                data + "\r\n");
 
   delay(10);
