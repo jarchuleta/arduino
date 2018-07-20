@@ -21,6 +21,8 @@ void setup() {
    delay(100);
    Serial.println("Preparing the Door Status Monitor project...");
 
+digitalWrite(2,LOW);
+
     Serial.println();
     Serial.println();
     Serial.print("Connecting to ");
@@ -42,6 +44,7 @@ void setup() {
     Serial.println("MDNS responder started");
 
     pinMode(2, OUTPUT);
+    //ADC_MODE(ADC_VCC);
   }
 
  String message = "";
@@ -111,8 +114,16 @@ message += "</html>";
     });
  server.begin();
   Serial.println("HTTP server started");
+
+
+   
 }
 
 void loop() {
    server.handleClient();
+
+   Serial.print("Loop Voltage:");
+   Serial.println(ESP.getVcc());
+   delay(2000);
+   
 }
